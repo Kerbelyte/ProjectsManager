@@ -95,9 +95,9 @@ echo '</table>';
 ?>
 
 <form method="POST">
-    <label for="name" style="font-size: 16px; color: grey">Add new project:</label>
-    <input class="project-name" type="text" id="name" name="project_name" value="" placeholder="Project name">
-    <label class="employee-name" for="name" style="font-size: 16px; color: grey">Employee name:</label>
+    <label for="name" style="font-size: 16px; color: grey;">Add new project:</label>
+    <input style = "margin-left: 5px; margin-right: 5%;" class="project-name" type="text" id="name" name="project_name" value="" placeholder="Project name">
+    <label style="margin-right: 5px; font-size: 16px; color: grey;" class="employee-name" for="name">Employee name:</label>
     <select name="emloyee_id">
         <option value=0></option>
         <?php

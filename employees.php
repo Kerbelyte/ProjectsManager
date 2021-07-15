@@ -21,16 +21,34 @@ if (isset($_GET['delete'])) {
 
 // ADD NEW LOGIC
 if (isset($_POST['add_employee'])) {
-    if (empty($_POST['name'])) {
+    if (empty($_POST['employees_name'])) {
         echo '<div style="color: red">Please enter employee name</div>';
     } else {
-        $stmt = $conn->prepare('INSERT INTO employees (name) VALUES (?)');
-        $name = $_POST['name'];
+        $sql = "SELECT name FROM employees WHERE name = ?";
+        $name = $_POST['employees_name'];
+        $stmt = $conn->prepare($sql);
         $stmt->bind_param('s', $name);
         $stmt->execute();
+        $stmt->bind_result($nameFromDB);
+        $stmt->fetch();
         $stmt->close();
-        header('Location: /ProjectsManager/index.php?path=employees');
-        exit;
+        if ($nameFromDB === null){
+            $stmt = $conn->prepare('INSERT INTO employees (name) VALUES (?)');
+            $stmt->bind_param('s', $name);
+            $stmt->execute();
+            $stmt->close();
+
+            if ($_POST['project_id'] != 0) {
+                $employeeID = $conn->insert_id;
+                $stmt = $conn->prepare('INSERT INTO projects_employees (id_employees, id_projects) VALUES (?, ?)');
+                $projectID = $_POST['project_id'];
+                $stmt->bind_param('ii', $employeeID, $projectID);
+                $stmt->execute();
+                $stmt->close();
+            }
+        } else {
+            echo '<div style="color: red">The Employee name already exists!</div>';
+        }
     }
 }
 
@@ -73,7 +91,20 @@ echo '</table>';
 
 ?>
 <form class="employees-form" method="POST">
-    <label class="employee-name" for="name" style="font-size: 16px; color: grey">Employee name:</label><br>
-    <input type="text" name="name" placeholder="Add employee name"><br>
+    <label class="employee-name" for="name" style="font-size: 16px; color: grey">Add new employee:</label>
+    <input style = "margin-left: 5px; margin-right: 5%;" type="text" name="employees_name" placeholder="Add employee name">
+    <label class="project-name" for="name" style="margin-right: 5px; font-size: 16px; color: grey;">Project name:</label>
+    <select name="project_id">
+        <option value=0></option>
+        <?php
+        $sql = "SELECT id, name FROM projects";
+        $result = mysqli_query($conn, $sql);
+
+        while ($row = mysqli_fetch_assoc($result)) {
+            echo "<option value={$row["id"]}>{$row["name"]}</option>";
+        }
+        ?>
+
+    </select>
     <input style="margin-left: 10px;" type="submit" name="add_employee" value="Add">
 </form>

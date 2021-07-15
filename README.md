@@ -7,7 +7,9 @@ This project implements CRUD (Create, Read, Update, Delete) functionality.
 
 * Create, Read, Update and Delete employees and projects;
 * Add employees to projects;
+* Add projects to employees;
 * Remove employees from projects;
+* Remove projects from employees;
 
 ## Installation
 

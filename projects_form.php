@@ -69,10 +69,12 @@ $name = mysqli_fetch_assoc($result);
     $result = mysqli_query($conn, $sql);
 
     while ($row = mysqli_fetch_assoc($result)) {
-        echo "<div style=\"position: relative; margin-left: 12px; padding: 0px 20px 0px 20px; border: 1px solid lightgrey;
+        echo "<div style=\"position: relative; margin-left: 12px; padding: 0px 30px 0px 20px; border: 1px solid lightgrey;
         border-radius: 5px;\">{$row["name"]}
-                    <a style= \"position: absolute; top: 0; right: 0; padding: 0px; line-height: 9px; text-decoration: none; color: red; border: 1px solid darkgrey;\"
-                    href=\"index.php?path=projects_form&id={$_GET['id']}&delete_employee_id={$row['id']}\">x</a>
+                    <a style= \"position: absolute; right: 0;padding: 0px; padding-right: 3px;line-height: 9px;color: red; font-size: small;\"
+                    href=\"index.php?path=projects_form&id={$_GET['id']}&delete_employee_id={$row['id']}\">
+                    <i class=\"fas fa-times\"></i>    
+                    </a>
             </div>";
     }
     ?>
