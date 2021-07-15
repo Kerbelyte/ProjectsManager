@@ -6,7 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ProjectManager</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 
@@ -14,8 +15,8 @@
     <header>
         <h1>Projects Manager system</h1>
         <div class="switch">
-            <a href="index.php?path=projects">Projects</a>
-            <a href="index.php?path=employees">Employees</a>
+            <a class="<?= (empty($_GET['path']) || $_GET['path'] == 'projects') ? 'active' : ''; ?>" href="index.php?path=projects">Projects</a>
+            <a class="<?= ($_GET['path'] == 'employees') ? 'active' : ''; ?>" href="index.php?path=employees">Employees</a>
         </div>
     </header>
 
@@ -37,32 +38,17 @@
             default:
                 include 'projects.php';
         }
-
-        $table = 'projects';
-        $title = 'EMPLOYEES';
-        $allowedPaths = array('projects', 'employees');
-
-        if (isset($_GET['path'])) {
-            if (in_array($_GET['path'], $allowedPaths)) {
-                $table = $_GET['path'];
-                $title = $_GET['path'] == 'projects' ? 'EMPLOYEES' : 'PROJECTS';
-            } else {
-                echo '<span style="color:red;margin:auto; display:table;"> ERROR 404!</span>';
-                die();
-            }
-        }
-
+        mysqli_close($conn);
         ?>
 
     </div>
     <footer class="footer">
-        <div class="text-duo">
-            <p class="one">Copyright @2021 <a href="https://linkedin.com/in/dovilė-kerbelytė-66634a162">Dovile</a></p>
-            <p class="two">Designed by <a href="https://linkedin.com/in/dovilė-kerbelytė-66634a162">By Myself</a></p>
-            <div class="clear"></div>
-        </div>
+        <p class="one">Copyright @2021 <a style="color:white;" href="https://linkedin.com/in/dovilė-kerbelytė-66634a162">Dovile</a></p>
+        <p class="two">Designed by <a style="color:white;" href="https://linkedin.com/in/dovilė-kerbelytė-66634a162">By Myself</a></p>
+        <div class="clear"></div>
 
     </footer>
+
 </body>
 
 </html>

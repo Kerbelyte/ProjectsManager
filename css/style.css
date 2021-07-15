@@ -1,0 +1,116 @@
+header {
+    background: steelblue;
+    border: ridge;
+}
+
+h1 {
+    padding-top: 30px;
+    text-align: center;
+    color: white;
+}
+
+.container {
+    background-color: white;
+}
+
+.switch {
+    display: flex;
+    justify-content: center;
+}
+
+.active {
+    color: white;
+    background-color: rgb(4, 95, 170);
+    box-shadow: 0 2px 8px #777;
+}
+
+.switch>a {
+    color: white;
+    text-decoration: none;
+    margin: 35px;
+    padding: 10px 43px;
+    border: 1px solid white;
+    border-radius: 7px;
+}
+
+.switch>a:hover {
+    color: white;
+    background-color: rgb(4, 95, 170);
+    transition: 300ms linear;
+    box-shadow: 0 2px 8px #777;
+}
+
+form {
+    display: flex;
+    padding-bottom: 30px;
+}
+
+td>a {
+    color: white;
+    text-decoration: none;
+    margin: 5px;
+    padding: 7px 15px;
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+    font-size: small;
+}
+
+.delete {
+    background-color: #ff0000b8;
+    display: inline-flex;
+}
+
+.update {
+    background-color: #4CAF50;
+    display: inline-flex;
+}
+
+td>.delete:hover {
+    color: white;
+    background-color: darkred;
+    transition: 300ms linear;
+    box-shadow: 0 2px 8px #777;
+}
+
+td>.update:hover {
+    color: white;
+    background-color: darkgreen;
+    transition: 300ms linear;
+    box-shadow: 0 2px 8px #777;
+}
+
+.project-name {
+    margin-left: 5px;
+    margin-right: 5%;
+}
+
+.employee-name {
+    margin-right: 5px;
+}
+
+.one {
+    margin-top: 40px;
+    margin-bottom: 10px;
+    margin-left: 65px;
+    float: left;
+    font-size: smaller;
+}
+
+.two {
+    margin-top: 40px;
+    margin-bottom: 10px;
+    margin-right: 65px;
+    float: right;
+    font-size: smaller;
+}
+
+footer {
+    width: 100%;
+    color: white;
+    background: steelblue;
+    border: ridge;
+}
+
+.clear {
+    clear: both;
+}

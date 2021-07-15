@@ -26,19 +26,30 @@ if (isset($_POST['add_project'])) {
     if (empty($_POST['project_name'])) {
         echo '<div style="color: red">Please enter project name</div>';
     } else {
-        $stmt = $conn->prepare('INSERT INTO projects (name) VALUES (?)');
+        $sql = "SELECT name FROM projects WHERE name = ?";
         $name = $_POST['project_name'];
+        $stmt = $conn->prepare($sql);
         $stmt->bind_param('s', $name);
         $stmt->execute();
+        $stmt->bind_result($nameFromDB);
+        $stmt->fetch();
         $stmt->close();
-
-        if ($_POST['emloyee_id'] != 0) {
-            $projectID = $conn->insert_id;
-            $stmt = $conn->prepare('INSERT INTO projects_employees (id_projects, id_employees) VALUES (?, ?)');
-            $employeeID = $_POST['emloyee_id'];
-            $stmt->bind_param('ii', $projectID, $employeeID);
+        if ($nameFromDB === null) {
+            $stmt = $conn->prepare('INSERT INTO projects (name) VALUES (?)');
+            $stmt->bind_param('s', $name);
             $stmt->execute();
             $stmt->close();
+
+            if ($_POST['emloyee_id'] != 0) {
+                $projectID = $conn->insert_id;
+                $stmt = $conn->prepare('INSERT INTO projects_employees (id_projects, id_employees) VALUES (?, ?)');
+                $employeeID = $_POST['emloyee_id'];
+                $stmt->bind_param('ii', $projectID, $employeeID);
+                $stmt->execute();
+                $stmt->close();
+            }
+        } else {
+            echo '<div style="color: red">The Project name already exists!</div>';
         }
     }
 }
@@ -56,18 +67,22 @@ echo '<table class="table">
                 <th>ID</th>
                 <th>NAME</th>
                 <th>EMPLOYEES</th>
-                <th style="padding-left: 60px;">ACTIONS</th>
+                <th>ACTIONS</th>
             </tr>
         </thead>';
 if (mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_assoc($result)) {
         echo "<tr>
-            <td>{$row["projects_id"]}</td>
-            <td>{$row["projects_name"]}</td>
-            <td>{$row["names"]}</td>
-            <td>
-                <a href=\"index.php?path=projects&delete=${row["projects_id"]}\">DELETE</a>
-                <a href=\"projects_form.php?id=${row["projects_id"]}\">UPDATE</a>
+            <td style=\"width:10%\">{$row["projects_id"]}</td>
+            <td style=\"width:30%\">{$row["projects_name"]}</td>
+            <td style=\"width:30%\">{$row["names"]}</td>
+            <td style=\"width:30%\">
+                <a class=\"delete\" href=\"index.php?path=projects&delete=${row["projects_id"]}\">
+                    <i class=\"fa fa-trash\"></i>
+                </a>
+                <a class=\"update\" href=\"index.php?path=projects_form&id=${row["projects_id"]}\">
+                <i class=\"far fa-edit\"></i>
+                </a>
             </td>
           </tr>";
     }
@@ -79,11 +94,10 @@ echo '</table>';
 
 ?>
 
-<br>
 <form method="POST">
-    <label for="name" style="font-size: 16px; color: grey">Project name:</label><br>
-    <input type="text" id="name" name="project_name" value="" placeholder="Add project name"><br>
-    <label for="name" style="font-size: 16px; color: grey">Employee name:</label><br>
+    <label for="name" style="font-size: 16px; color: grey">Add new project:</label>
+    <input class="project-name" type="text" id="name" name="project_name" value="" placeholder="Project name">
+    <label class="employee-name" for="name" style="font-size: 16px; color: grey">Employee name:</label>
     <select name="emloyee_id">
         <option value=0></option>
         <?php
@@ -93,9 +107,8 @@ echo '</table>';
         while ($row = mysqli_fetch_assoc($result)) {
             echo "<option value={$row["id"]}>{$row["name"]}</option>";
         }
-        mysqli_close($conn);
         ?>
 
-    </select><br>
-    <input type="submit" name="add_project" value="Add">
+    </select>
+    <input style="margin-left: 10px;" type="submit" name="add_project" value="Add">
 </form>

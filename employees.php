@@ -1,7 +1,6 @@
 <?php
 
 // DELETE LOGIC
-
 if (isset($_GET['delete'])) {
     $id = (int) $_GET['delete'];
     if ($id > 0) {
@@ -21,10 +20,9 @@ if (isset($_GET['delete'])) {
 }
 
 // ADD NEW LOGIC
-
 if (isset($_POST['add_employee'])) {
     if (empty($_POST['name'])) {
-        $msg = '<div style="color: red">Please enter a name</div>';
+        echo '<div style="color: red">Please enter employee name</div>';
     } else {
         $stmt = $conn->prepare('INSERT INTO employees (name) VALUES (?)');
         $name = $_POST['name'];
@@ -48,19 +46,23 @@ echo '<table class="table">
             <tr>
                 <th>ID</th>
                 <th>NAME</th>
-                <th>PROJECTS</th>
-                <th style="padding-left: 60px;">ACTIONS</th>
+                <th>PROJECT</th>
+                <th>ACTIONS</th>
             </tr>
         </thead>';
 if (mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_assoc($result)) {
         echo "<tr>
-            <td>{$row["employees_id"]}</td>
-            <td>{$row["employees_name"]}</td>
-            <td>{$row["names"]}</td>
-            <td>
-                <a href=\"index.php?path=employees&delete=${row["employees_id"]}\">DELETE</a>
-                <a href=\"employees_form.php?id=${row["employees_id"]}\">UPDATE</a>
+            <td style=\"width:10%\">{$row["employees_id"]}</td>
+            <td style=\"width:30%\">{$row["employees_name"]}</td>
+            <td style=\"width:30%\">{$row["names"]}</td>
+            <td style=\"width:30%\">
+                <a class=\"delete\" href=\"index.php?path=employees&delete=${row["employees_id"]}\">
+                    <i class=\"fa fa-trash\"></i>
+                </a>
+                <a class=\"update\" href=\"index.php?path=employees_form&id=${row["employees_id"]}\">
+                    <i class=\"far fa-edit\"></i>
+                </a>
             </td>
           </tr>";
     }
@@ -69,12 +71,9 @@ if (mysqli_num_rows($result) > 0) {
 }
 echo '</table>';
 
-mysqli_close($conn);
-
 ?>
-<br>
-<form method="POST">
-    <label for="name" style="font-size: 16px; color: grey">Employee name:</label><br>
+<form class="employees-form" method="POST">
+    <label class="employee-name" for="name" style="font-size: 16px; color: grey">Employee name:</label><br>
     <input type="text" name="name" placeholder="Add employee name"><br>
-    <input type="submit" name="add_employee" value="Add">
+    <input style="margin-left: 10px;" type="submit" name="add_employee" value="Add">
 </form>
