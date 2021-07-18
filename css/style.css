@@ -16,6 +16,7 @@ h1 {
 .switch {
     display: flex;
     justify-content: center;
+    text-align: center;
 }
 
 .active {
@@ -100,6 +101,55 @@ footer {
     color: white;
     background: steelblue;
     border: ridge;
+}
+
+@media (max-width: 620px) {
+    .switch {
+        display: grid;
+        justify-content: center;
+    }
+    .switch>a {
+        margin: 10px;
+        padding: 3px 20px;
+    }
+    .table>:not(caption)>*>* {
+        padding: .2rem .2rem;
+    }
+    .table {
+        font-size: small;
+    }
+    .employees-form {
+        display: block;
+        padding-bottom: 30px;
+    }
+    .employees-form>.project-name {
+        display: block;
+        margin-top: 10px;
+    }
+    .projects-form {
+        display: block;
+    }
+    .projects-form>.employee-name {
+        display: block;
+        margin-top: 10px;
+    }
+    .footer {
+        display: flex;
+    }
+    .one {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-left: 70px;
+        float: left;
+        font-size: smaller;
+    }
+    .two {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-left: 70px;
+        float: left;
+        font-size: smaller;
+    }
 }
 
 .clear {
