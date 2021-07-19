@@ -15,14 +15,14 @@ if (isset($_GET['delete'])) {
         $stmt->execute();
     }
 
-    header('Location: /ProjectsManager/index.php?path=employees');
+    header('Location: index.php?path=employees');
     exit;
 }
 
 // ADD NEW LOGIC
 if (isset($_POST['add_employee'])) {
     if (empty($_POST['employees_name'])) {
-        echo '<div style="color: red">Please enter employee name</div>';
+        echo '<div style="color: red">Please enter employee name!</div>';
     } else {
         $sql = "SELECT name FROM employees WHERE name = ?";
         $name = $_POST['employees_name'];
@@ -32,7 +32,7 @@ if (isset($_POST['add_employee'])) {
         $stmt->bind_result($nameFromDB);
         $stmt->fetch();
         $stmt->close();
-        if ($nameFromDB === null){
+        if ($nameFromDB === null) {
             $stmt = $conn->prepare('INSERT INTO employees (name) VALUES (?)');
             $stmt->bind_param('s', $name);
             $stmt->execute();
@@ -75,11 +75,11 @@ if (mysqli_num_rows($result) > 0) {
             <td style=\"width:30%\">{$row["employees_name"]}</td>
             <td style=\"width:30%\">{$row["names"]}</td>
             <td style=\"width:30%\">
-                <a class=\"delete\" href=\"index.php?path=employees&delete=${row["employees_id"]}\">
-                    <i class=\"fa fa-trash\"></i>
-                </a>
                 <a class=\"update\" href=\"index.php?path=employees_form&id=${row["employees_id"]}\">
                     <i class=\"far fa-edit\"></i>
+                </a>
+                <a class=\"delete\" href=\"index.php?path=employees&delete=${row["employees_id"]}\">
+                    <i class=\"fa fa-trash\"></i>
                 </a>
             </td>
           </tr>";
@@ -92,7 +92,7 @@ echo '</table>';
 ?>
 <form class="employees-form" method="POST">
     <label class="employee-name" for="name" style="font-size: 16px; color: grey">Add new employee:</label>
-    <input style = "margin-left: 5px; margin-right: 5%;" type="text" name="employees_name" placeholder="Add employee name">
+    <input style="margin-left: 5px; margin-right: 5%;" type="text" name="employees_name" placeholder="Add employee name">
     <label class="project-name" for="name" style="margin-right: 5px; font-size: 16px; color: grey;">Project name:</label>
     <select name="project_id">
         <option value=0></option>

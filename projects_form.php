@@ -4,21 +4,25 @@ $id = (int) $_GET['id'];
 
 // update logic
 if (isset($_POST['project_name'])) {
-    $stmt = $conn->prepare('UPDATE projects SET name = ? WHERE id = ?');
-    $name = $_POST["project_name"];
-    $stmt->bind_param('si', $name, $id);
-    $stmt->execute();
-    $stmt->close();
+    if (empty($_POST['project_name'])) {
+        echo '<div style="color: red">Please enter project name!</div>';
+    } else {
+        $stmt = $conn->prepare('UPDATE projects SET name = ? WHERE id = ?');
+        $name = $_POST["project_name"];
+        $stmt->bind_param('si', $name, $id);
+        $stmt->execute();
+        $stmt->close();
 
-    $projectID = $conn->insert_id;
-    $stmt = $conn->prepare('INSERT INTO projects_employees (id_projects, id_employees) VALUES (?, ?)');
-    $employeeID = $_POST['emloyee_id'];
-    $stmt->bind_param('ii', $id, $employeeID);
-    $stmt->execute();
-    $stmt->close();
+        $projectID = $conn->insert_id;
+        $stmt = $conn->prepare('INSERT INTO projects_employees (id_projects, id_employees) VALUES (?, ?)');
+        $employeeID = $_POST['emloyee_id'];
+        $stmt->bind_param('ii', $id, $employeeID);
+        $stmt->execute();
+        $stmt->close();
 
-    header('Location: /ProjectsManager/index.php?path=projects');
-    exit;
+        header('Location: index.php?path=projects');
+        exit;
+    }
 }
 
 $sql = "SELECT projects.id, projects.name
@@ -45,8 +49,7 @@ $name = mysqli_fetch_assoc($result);
         }
         ?>
     </select>
-    <input style="background-color: #4CAF50; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer;float: right; margin-left: 10px;" 
-           type="submit" name="update" value="Update">
+    <input style="background-color: #4CAF50; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer;float: right; margin-left: 10px;" type="submit" name="update" value="Update">
 </form>
 
 <label style="justify-content: center; padding: 20px; display: flex;">Project employees:

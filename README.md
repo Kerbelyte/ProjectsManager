@@ -13,7 +13,7 @@ This project implements CRUD (Create, Read, Update, Delete) functionality.
 
 * Clone the repository;
 * Import 'projects.sql' script into local SQL Server and create a database;
-* Open the path where you can launch php interpreter, e.g. http://localhost/ProjectsManager/index.php;
+* Open the path where you can launch php interpreter, e.g. http://localhost;
 
 ## Author
 Dovilė [Github](https://github.com/Kerbelyte) , [LinkedIn](https://linkedin.com/in/dovilė-kerbelytė-66634a162)

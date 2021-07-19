@@ -5,20 +5,24 @@ $id = (int) $_GET['id'];
 // update logic
 
 if (isset($_POST['name'])) {
-    $stmt = $conn->prepare('UPDATE employees SET name = ? WHERE id = ?');
-    $name = $_POST['name'];
-    $stmt->bind_param('si', $name, $id);
-    $stmt->execute();
-    $stmt->close();
-    
-    $employeeID = $conn->insert_id;
-    $stmt = $conn->prepare('INSERT INTO projects_employees (id_employees, id_projects) VALUES (?, ?)');
-    $projectID = $_POST['project_id'];
-    $stmt->bind_param('ii', $id, $projectID);
-    $stmt->execute();
-    $stmt->close();
-    header('Location: /ProjectsManager/index.php?path=employees');
-    exit;
+    if (empty($_POST['name'])) {
+        echo '<div style="color: red">Please enter employee name!</div>';
+    } else {
+        $stmt = $conn->prepare('UPDATE employees SET name = ? WHERE id = ?');
+        $name = $_POST['name'];
+        $stmt->bind_param('si', $name, $id);
+        $stmt->execute();
+        $stmt->close();
+
+        $employeeID = $conn->insert_id;
+        $stmt = $conn->prepare('INSERT INTO projects_employees (id_employees, id_projects) VALUES (?, ?)');
+        $projectID = $_POST['project_id'];
+        $stmt->bind_param('ii', $id, $projectID);
+        $stmt->execute();
+        $stmt->close();
+        header('Location: index.php?path=employees');
+        exit;
+    }
 }
 
 $sql = "SELECT employees.id, employees.name
@@ -47,8 +51,7 @@ $name = mysqli_fetch_assoc($result);
         }
         ?>
     </select>
-    <input style="background-color: #4CAF50; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer;float: right; margin-left: 10px;" 
-           type="submit" name="update" value="Update">
+    <input style="background-color: #4CAF50; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer;float: right; margin-left: 10px;" type="submit" name="update" value="Update">
 </form>
 
 <label style="justify-content: center; padding: 20px; display: flex;">Employee projects:
@@ -81,4 +84,3 @@ $name = mysqli_fetch_assoc($result);
     }
     ?>
 </label>
-

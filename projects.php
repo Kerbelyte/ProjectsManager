@@ -16,7 +16,7 @@ if (isset($_GET['delete'])) {
         $stmt->execute();
     }
 
-    header('Location: /ProjectsManager/index.php?path=projects');
+    header('Location: index.php?path=projects');
     exit;
 }
 
@@ -24,7 +24,7 @@ if (isset($_GET['delete'])) {
 
 if (isset($_POST['add_project'])) {
     if (empty($_POST['project_name'])) {
-        echo '<div style="color: red">Please enter project name</div>';
+        echo '<div style="color: red">Please enter project name!</div>';
     } else {
         $sql = "SELECT name FROM projects WHERE name = ?";
         $name = $_POST['project_name'];
@@ -77,11 +77,11 @@ if (mysqli_num_rows($result) > 0) {
             <td style=\"width:30%\">{$row["projects_name"]}</td>
             <td style=\"width:30%\">{$row["names"]}</td>
             <td style=\"width:30%\">
+                <a class=\"update\" href=\"index.php?path=projects_form&id=${row["projects_id"]}\">
+                    <i class=\"far fa-edit\"></i>
+                </a>
                 <a class=\"delete\" href=\"index.php?path=projects&delete=${row["projects_id"]}\">
                     <i class=\"fa fa-trash\"></i>
-                </a>
-                <a class=\"update\" href=\"index.php?path=projects_form&id=${row["projects_id"]}\">
-                <i class=\"far fa-edit\"></i>
                 </a>
             </td>
           </tr>";
