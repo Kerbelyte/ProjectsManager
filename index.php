@@ -1,5 +1,9 @@
 <?php
 ob_start();
+
+include "bootstrap.php";
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,19 +34,38 @@ ob_start();
         $path = !empty($_GET['path']) ? $_GET['path'] : '';
         switch ($path) {
             case 'employees_form':
-                include 'employees_form.php';
+                include 'src/employees/form.php';
                 break;
             case 'employees':
-                include 'employees.php';
+                include 'src/employees/table.php';
                 break;
             case 'projects_form':
-                include 'projects_form.php';
+                include 'src/projects/form.php';
                 break;
             default:
-                include 'projects.php';
+                include 'src/projects/table.php';
         }
         mysqli_close($conn);
         ?>
+
+        <!-- <?php
+        // $request = $_SERVER['REQUEST_URI'];
+        // switch ($request) {
+        //     case '/':
+        //         require __DIR__ . '/views/index.php';
+        //         break;
+        //     case '':
+        //         require __DIR__ . '/views/index.php';
+        //         break;
+        //     case '/about':
+        //         require __DIR__ . '/views/about.php';
+        //         break;
+        //     default:
+        //         http_response_code(404);
+        //         require __DIR__ . '/views/404.php';
+        //         break;
+        // }
+        ?> -->
 
     </div>
     <footer class="footer">

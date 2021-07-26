@@ -1,0 +1,22 @@
+{
+    "name": "dovile/projects-manager",
+    "description": "This is my second project built in PHP",
+    "authors": [{
+        "name": "Kerbelyte",
+        "email": "80693721+Kerbelyte@users.noreply.github.com"
+    }],
+    "require": {
+        "doctrine/orm": "^2.9",
+        "symfony/cache": "^5.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Models\\": "src/models/",
+            "Projects\\": "src/projects/",
+            "Employees\\": "src/employees/"
+        }
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^5.3"
+    }
+}
