@@ -1,14 +1,12 @@
 <?php
 
-$projectsManager = new Projects\ProjectsManager($conn);
 // DELETE LOGIC
 
 if (isset($_GET['delete'])) {
     $id = (int) $_GET['delete'];
-    $projectsManager->delete($id);
-
-    header('Location: index.php?path=projects');
-    exit;
+    if ($id > 0) {
+        $projectsManager->delete($id);
+    }
 }
 
 // CREATE LOGIC
@@ -17,7 +15,12 @@ if (isset($_POST['add_project'])) {
     if (empty($_POST['project_name'])) {
         echo '<div style="color: red">Please enter project name!</div>';
     } else {
-        $projectsManager->create($_POST['project_name']);
+        $createResult = $projectsManager->create($_POST['project_name'], $_POST['employee_id']);
+        if (!$createResult) {
+            echo '<div style="color: red">The Project name already exists!</div>';
+        } else {
+            echo '<div style="color: green">The Project successfully created!</div>';
+        }
     }
 }
 
@@ -31,19 +34,19 @@ echo '<table class="table">
                 <th>ACTIONS</th>
             </tr>
         </thead>';
-  
+
 $data = $projectsManager->read();
 if (count($data) > 0) {
     foreach ($data as $row) {
         echo "<tr>
-            <td style=\"width:10%\">{$row["projects_id"]}</td>
-            <td style=\"width:30%\">{$row["projects_name"]}</td>
-            <td style=\"width:30%\">{$row["names"]}</td>
+            <td style=\"width:10%\">" . $row->getId() . "</td>
+            <td style=\"width:30%\">" . $row->getName() . "</td>
+            <td style=\"width:30%\">" . $row->getEmployeeList() . "</td>
             <td style=\"width:30%\">
-                <a class=\"update\" href=\"index.php?path=projects_form&id=${row["projects_id"]}\">
+                <a class=\"update\" href=\"index.php?path=projects_form&id=" . $row->getId() . "\">
                     <i class=\"far fa-edit\"></i>
                 </a>
-                <a class=\"delete\" href=\"index.php?path=projects&delete=${row["projects_id"]}\">
+                <a class=\"delete\" href=\"index.php?path=projects&delete=" . $row->getId() . "\">
                     <i class=\"fa fa-trash\"></i>
                 </a>
             </td>
@@ -60,14 +63,13 @@ echo '</table>';
     <label for="name" style="font-size: 16px; color: grey;">Add new project:</label>
     <input style="margin-left: 5px; margin-right: 5%;" class="project-name" type="text" id="name" name="project_name" value="" placeholder="Project name">
     <label style="margin-right: 5px; font-size: 16px; color: grey;" class="employee-name" for="name">Employee name:</label>
-    <select name="emloyee_id">
+    <select name="employee_id">
         <option value=0></option>
         <?php
-        $employees = new Employees\EmployeesManager($conn);
-        $employees = $employees->getEmplyees();
+        $employees = $employeesManager->read();
 
         foreach ($employees as $employee) {
-            echo "<option value={$employee["id"]}>{$employee["name"]}</option>";
+            echo "<option value=" . $employee->getId() . ">" . $employee->getName() . "</option>";
         }
         ?>
 

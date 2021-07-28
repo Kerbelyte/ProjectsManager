@@ -1,6 +1,7 @@
 <?php
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\VarDumper\VarDumper;
 
 require_once "vendor/autoload.php";
 
@@ -20,5 +21,23 @@ $conn = array(
     'password' => ''
 );
 
-// obtaining the entity manager
+
 $entityManager = EntityManager::create($conn, $config);
+// $projects = $entityManager->getRepository('Models\Projects')->findAll();
+// foreach ($projects as $project) {
+//     dump($project);
+// }
+
+// exit;
+
+// $project = $entityManager->find('Models\Projects', 1);
+// foreach ($project->getEmployees() as $employee) {
+//     dump($employee);
+// }
+
+// exit;
+
+include 'db.php';
+
+$projectsManager = new Projects\ProjectsManager($conn, $entityManager);
+$employeesManager = new Employees\EmployeesManager($conn, $entityManager);

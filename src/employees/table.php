@@ -1,23 +1,25 @@
 <?php
 
 // DELETE LOGIC
-
-$employeesManager = new Employees\EmployeesManager($conn);
-
 if (isset($_GET['delete'])) {
     $id = (int) $_GET['delete'];
-    $employeesManager->delete($id);
-
-    header('Location: index.php?path=employees');
-    exit;
+    if ($id > 0) {
+        $employeesManager->delete($id);
+    }
 }
 
 // CREATE LOGIC
+
 if (isset($_POST['add_employee'])) {
     if (empty($_POST['employees_name'])) {
         echo '<div style="color: red">Please enter employee name!</div>';
     } else {
-        $employeesManager->create($_POST['employees_name']);
+        $createResult = $employeesManager->create($_POST['employees_name'], $_POST['project_id']);
+        if (!$createResult) {
+            echo '<div style="color: red">The Employee name already exists!</div>';
+        } else {
+            echo '<div style="color: green">The Employee successfully created!</div>';
+        }
     }
 }
 
@@ -36,14 +38,14 @@ $data = $employeesManager->read();
 if (count($data) > 0) {
     foreach ($data as $row) {
         echo "<tr>
-            <td style=\"width:10%\">{$row["employees_id"]}</td>
-            <td style=\"width:30%\">{$row["employees_name"]}</td>
-            <td style=\"width:30%\">{$row["names"]}</td>
+            <td style=\"width:10%\">" . $row->getId() . "</td>
+            <td style=\"width:30%\">" . $row->getName() . "</td>
+            <td style=\"width:30%\">" . $row->getProjectList() . "</td>
             <td style=\"width:30%\">
-                <a class=\"update\" href=\"index.php?path=employees_form&id=${row["employees_id"]}\">
+                <a class=\"update\" href=\"index.php?path=employees_form&id=" . $row->getId() . "\">
                     <i class=\"far fa-edit\"></i>
                 </a>
-                <a class=\"delete\" href=\"index.php?path=employees&delete=${row["employees_id"]}\">
+                <a class=\"delete\" href=\"index.php?path=employees&delete=" . $row->getId() . "\">
                     <i class=\"fa fa-trash\"></i>
                 </a>
             </td>
@@ -55,7 +57,7 @@ if (count($data) > 0) {
 echo '</table>';
 
 ?>
-<form class="employees-form" method="POST">
+<form class="employees-form" action="index.php?path=employees" method="POST">
     <label class="employee-name" for="name" style="font-size: 16px; color: grey">Add new employee:</label>
     <input style="margin-left: 5px; margin-right: 5%;" type="text" name="employees_name" placeholder="Add employee name">
     <label class="project-name" for="name" style="margin-right: 5px; font-size: 16px; color: grey;">Project name:</label>
@@ -63,11 +65,10 @@ echo '</table>';
         <option value=0></option>
         <?php
 
-        $projectsManager = new Projects\ProjectsManager($conn);
-        $projects = $projectsManager->getProjects();
+        $projects = $projectsManager->read();
 
         foreach ($projects as $project) {
-            echo "<option value={$project["id"]}>{$project["name"]}</option>";
+            echo "<option value=" . $project->getId() . ">" . $project->getName() . "</option>";
         }
         ?>
 

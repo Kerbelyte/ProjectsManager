@@ -2,135 +2,91 @@
 
 namespace Projects;
 
-class ProjectsManager 
+class ProjectsManager
 {
     private $conn;
+    private $entityManager;
 
-    public function __construct($conn)
+    public function __construct($conn, $entityManager)
     {
         $this->conn = $conn;
+        $this->entityManager = $entityManager;
     }
 
     public function delete($id)
     {
-        if ($id > 0) {
-            $delete = 'DELETE FROM projects_employees WHERE id_projects = ?';
-            $stmt = $this->conn->prepare($delete);
-            $stmt->bind_param('i', $id);
-            $stmt->execute();
-    
-            $delete = 'DELETE FROM projects WHERE id = ?';
-            $stmt = $this->conn->prepare($delete);
-            $stmt->bind_param('i', $id);
-            $stmt->execute();
-        }
-    }
-
-    public function create($name)
-    {
-        $nameFromDB = null;
-        $sql = "SELECT name FROM projects WHERE name = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param('s', $name);
-        $stmt->execute();
-        $stmt->bind_result($nameFromDB);
-        $stmt->fetch();
-        $stmt->close();
-        if ($nameFromDB === null) {
-            $stmt = $this->conn->prepare('INSERT INTO projects (name) VALUES (?)');
-            $stmt->bind_param('s', $name);
-            $stmt->execute();
-            $stmt->close();
-
-            if ($_POST['emloyee_id'] != 0) {
-                $projectID = $this->conn->insert_id;
-                $stmt = $this->conn->prepare('INSERT INTO projects_employees (id_projects, id_employees) VALUES (?, ?)');
-                $employeeID = $_POST['emloyee_id'];
-                $stmt->bind_param('ii', $projectID, $employeeID);
-                $stmt->execute();
-                $stmt->close();
+        $project = $this->entityManager->find('Models\Projects', $id);
+        if ($project !== null) {
+            foreach ($project->getEmployees() as $employee) {
+                $employee->getProjects()->removeElement($project);
+                $project->getEmployees()->removeElement($employee);
             }
-        } else {
-            echo '<div style="color: red">The Project name already exists!</div>';
+            $this->entityManager->remove($project);
+            $this->entityManager->flush();
         }
     }
 
-    public function update($id)
+    public function create($name, $employeeId)
     {
-        $stmt = $this->conn->prepare('UPDATE projects SET name = ? WHERE id = ?');
-        $stmt->bind_param('si', $_POST["project_name"], $id);
-        $stmt->execute();
-        $stmt->close();
+        $project = $this->entityManager->getRepository('Models\Projects')->findOneBy(array('name' => $name));
+        if ($project !== null) {
+            return false;
+        }
+        $project = new \Models\Projects();
+        $project->setName($name);
 
-        $stmt = $this->conn->prepare('INSERT INTO projects_employees (id_projects, id_employees) VALUES (?, ?)');
-        $employeeID = $_POST['emloyee_id'];
-        $stmt->bind_param('ii', $id, $employeeID);
-        $stmt->execute();
-        $stmt->close();
+        if ($employeeId !== 0) {
+            $employee = $this->entityManager->getRepository('Models\Employees')->findOneBy(array('id' => $employeeId));
+            if ($employee !== null) {
+                $project->addEmployee($employee);
+            }
+        }
+        $this->entityManager->persist($project);
+        $this->entityManager->flush();
+        return true;
     }
 
-    public function deleteEmployees($id)
+    public function update($id, $name, $employeeId)
     {
-        $delete = 'DELETE FROM projects_employees WHERE id_projects = ?  AND id_employees = ?';
-        $stmt = $this->conn->prepare($delete);
-        $stmt->bind_param('ii', $id, $_GET['delete_employee_id']);
-        $stmt->execute();
+        $project = $this->entityManager->find('Models\Projects', $id);
+        $project->setName($name);
+        if ($employeeId != 0) {
+            $employee = $this->entityManager->getRepository('Models\Employees')->findOneBy(array('id' => $employeeId));
+            $project->addEmployee($employee);
+        }
+        $this->entityManager->flush();
+        header('Location: index.php?path=projects');
+    }
+
+    public function deleteEmployees($ProjectId, $employeeId)
+    {
+        $project = $this->entityManager->find('Models\Projects', $ProjectId);
+        $employee = $this->entityManager->getRepository('Models\Employees')->findOneBy(array('id' => $employeeId));
+        $employee->getProjects()->removeElement($project);
+        $project->getEmployees()->removeElement($employee);
+        $this->entityManager->flush();
     }
 
     public function read()
     {
-        $sql = "SELECT projects.id as projects_id, projects.name as projects_name, GROUP_CONCAT(' ', employees.name) as names
-            FROM projects
-            LEFT JOIN projects_employees ON projects_employees.id_projects = projects.id
-            LEFT JOIN employees ON employees.id = projects_employees.id_employees
-            GROUP BY projects.id";
-
-        $result = mysqli_query($this->conn, $sql);
-
-        $rows = [];
-
-        if (mysqli_num_rows($result) > 0) {
-            while ($row = mysqli_fetch_assoc($result)){
-                $rows[] = $row;
-            }
+        $result = [];
+        $employees = $this->entityManager->getRepository('Models\Projects')->findAll();
+        foreach ($employees as $employee) {
+            $result[] = $employee;
         }
-        return $rows;    
+        return $result;
     }
 
-    public function getProjects()
-    {
-        $rows = [];
-        $sql = "SELECT id, name FROM projects";
-        $result = mysqli_query($this->conn, $sql);
-
-        while ($row = mysqli_fetch_assoc($result)) {
-            $rows[] = $row;
-        }
-        return $rows;
-    }
 
     public function getProjectName($id)
     {
-        $sql = "SELECT projects.name
-            FROM projects
-            WHERE projects.id = $id";
-        $result = mysqli_query($this->conn, $sql);
-        $row =  mysqli_fetch_assoc($result);
-        return $row['name'];
+        $project = $this->entityManager->getRepository('Models\Projects')->findOneBy(array('id' => $id));
+        return $project->getName();
     }
 
-    public function showEmplyees()
+    public function getProjectEmployees($id)
     {
-        $sql = "SELECT projects.name, projects.id 
-        FROM projects_employees 
-        LEFT JOIN projects ON projects.id = projects_employees.id_projects 
-        WHERE projects_employees.id_employees = {$_GET['id']}";
-
-        $result = mysqli_query($this->conn, $sql);
-        $rows = [];
-        while ($row = mysqli_fetch_assoc($result)){
-            $rows[] = $row;
-        }
-        return $rows;
+        $project = $this->entityManager->getRepository('Models\Projects')->findOneBy(array('id' => $id));
+        return $project->getEmployees();
     }
 }

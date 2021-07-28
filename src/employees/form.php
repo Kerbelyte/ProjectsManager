@@ -1,6 +1,6 @@
 <?php
-include 'db.php';
-$employeesManager = new Employees\EmployeesManager($conn);
+
+
 $id = (int) $_GET['id'];
 
 
@@ -10,11 +10,12 @@ if (isset($_POST['name'])) {
     if (empty($_POST['name'])) {
         echo '<div style="color: red">Please enter employee name!</div>';
     } else {
-        $employeesManager->update($id);
+        $employeesManager->update($id, $_POST['name'], $_POST['project_id']);
     }
 }
 
 $employeeName = $employeesManager->getEmployeeName($id);
+
 
 ?>
 
@@ -27,11 +28,10 @@ $employeeName = $employeesManager->getEmployeeName($id);
         <?php
 
         //    select employee project logic
-        $projectsManager = new Projects\ProjectsManager($conn);
-        $projects = $projectsManager->getProjects();
+        $projects = $projectsManager->read();
 
         foreach ($projects as $project) {
-            echo "<option value={$project["id"]}>{$project["name"]}</option>";
+            echo "<option value=" . $project->getId() . ">" . $project->getName() . "</option>";
         }
         ?>
     </select>
@@ -42,21 +42,18 @@ $employeeName = $employeesManager->getEmployeeName($id);
     <?php
 
     //    delete employee project logic
-
     if (!empty($_GET['delete_project_id'])) {
-        $employeesManager = new Employees\EmployeesManager($conn);
-        $employeesManager->deleteProjects($id);
+        $employeesManager->deleteProjects($id, $_GET['delete_project_id']);
     }
     //    select employee projects logic
 
-    $projects = new Projects\ProjectsManager($conn);
-    $projects = $projectsManager->showEmplyees();
+    $projects = $employeesManager->getEmployeeProject($id);
 
     foreach($projects as $project) {
         echo "<div style=\"position: relative; margin-left: 12px; padding: 0px 30px 0px 20px; border: 1px solid lightgrey;
-        border-radius: 5px;\">{$project["name"]}
+        border-radius: 5px;\">" . $project->getName() . "
                     <a style= \"position: absolute; right: 0;padding: 0px; padding-right: 3px;line-height: 9px;color: red; font-size: small;\"
-                    href=\"index.php?path=employees_form&id={$_GET['id']}&delete_project_id={$project['id']}\">
+                    href=\"index.php?path=employees_form&id={$id}&delete_project_id=" . $project->getId() . "\">
                     <i class=\"fas fa-times\"></i>    
                     </a>
             </div>";
