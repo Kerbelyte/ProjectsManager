@@ -21,21 +21,7 @@ $conn = array(
     'password' => ''
 );
 
-
 $entityManager = EntityManager::create($conn, $config);
-// $projects = $entityManager->getRepository('Models\Projects')->findAll();
-// foreach ($projects as $project) {
-//     dump($project);
-// }
-
-// exit;
-
-// $project = $entityManager->find('Models\Projects', 1);
-// foreach ($project->getEmployees() as $employee) {
-//     dump($employee);
-// }
-
-// exit;
 
 include 'db.php';
 

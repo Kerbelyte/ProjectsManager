@@ -48,25 +48,6 @@ include "bootstrap.php";
         mysqli_close($conn);
         ?>
 
-        <!-- <?php
-        // $request = $_SERVER['REQUEST_URI'];
-        // switch ($request) {
-        //     case '/':
-        //         require __DIR__ . '/views/index.php';
-        //         break;
-        //     case '':
-        //         require __DIR__ . '/views/index.php';
-        //         break;
-        //     case '/about':
-        //         require __DIR__ . '/views/about.php';
-        //         break;
-        //     default:
-        //         http_response_code(404);
-        //         require __DIR__ . '/views/404.php';
-        //         break;
-        // }
-        ?> -->
-
     </div>
     <footer class="footer">
         <p class="one">Copyright @2021 <a style="color:white;" href="https://linkedin.com/in/dovilė-kerbelytė-66634a162">Dovile</a></p>
