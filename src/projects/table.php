@@ -1,7 +1,6 @@
 <?php
 
 // DELETE LOGIC
-
 if (isset($_GET['delete'])) {
     $id = (int) $_GET['delete'];
     if ($id > 0) {
@@ -10,7 +9,6 @@ if (isset($_GET['delete'])) {
 }
 
 // CREATE LOGIC
-
 if (isset($_POST['add_project'])) {
     if (empty($_POST['project_name'])) {
         echo '<div style="color: red">Please enter project name!</div>';
@@ -56,7 +54,6 @@ if (count($data) > 0) {
     echo '0 results';
 }
 echo '</table>';
-
 ?>
 
 <form class="projects-form" method="POST">
@@ -67,7 +64,6 @@ echo '</table>';
         <option value=0></option>
         <?php
         $employees = $employeesManager->read();
-
         foreach ($employees as $employee) {
             echo "<option value=" . $employee->getId() . ">" . $employee->getName() . "</option>";
         }

@@ -23,7 +23,5 @@ $conn = array(
 
 $entityManager = EntityManager::create($conn, $config);
 
-include 'db.php';
-
 $projectsManager = new Projects\ProjectsManager($conn, $entityManager);
 $employeesManager = new Employees\EmployeesManager($conn, $entityManager);

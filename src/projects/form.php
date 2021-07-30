@@ -24,7 +24,6 @@ $projectName = $projectsManager->getProjectName($id);
 
         //    select project employees logic
         $employees = $employeesManager->read();
-
         foreach ($employees as $employee) {
             echo "<option value=" . $employee->getId() . ">" . $employee->getName() . "</option>";
         }
@@ -37,7 +36,6 @@ $projectName = $projectsManager->getProjectName($id);
     <?php
 
     //    delete project employees logic
-
     if (!empty($_GET['delete_employee_id'])) {
         $projectsManager->deleteEmployees($id, $_GET['delete_employee_id']);
     }

@@ -77,7 +77,6 @@ class ProjectsManager
         return $result;
     }
 
-
     public function getProjectName($id)
     {
         $project = $this->entityManager->getRepository('Models\Projects')->findOneBy(array('id' => $id));

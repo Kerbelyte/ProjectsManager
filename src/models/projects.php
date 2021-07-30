@@ -65,6 +65,4 @@ class Projects
         }
         return rtrim($result, ', ');
     }
-
 }
-?>

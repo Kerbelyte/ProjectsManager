@@ -64,9 +64,7 @@ class Employees
             $result .= $project->getName() . ', ';
         }
         return rtrim($result, ', ');
-    }
-
-    
+    } 
 }    
 
 ?>

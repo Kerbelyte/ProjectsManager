@@ -29,7 +29,6 @@ include "bootstrap.php";
 
     <div class="container">
         <?php
-        include 'db.php';
 
         $path = !empty($_GET['path']) ? $_GET['path'] : '';
         switch ($path) {
@@ -45,7 +44,6 @@ include "bootstrap.php";
             default:
                 include 'src/projects/table.php';
         }
-        mysqli_close($conn);
         ?>
 
     </div>

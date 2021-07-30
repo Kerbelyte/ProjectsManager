@@ -1,11 +1,8 @@
 <?php
 
-
 $id = (int) $_GET['id'];
 
-
 // update logic
-
 if (isset($_POST['name'])) {
     if (empty($_POST['name'])) {
         echo '<div style="color: red">Please enter employee name!</div>';
@@ -16,9 +13,7 @@ if (isset($_POST['name'])) {
 
 $employeeName = $employeesManager->getEmployeeName($id);
 
-
 ?>
-
 <form style="justify-content: center; padding: 20px; display: flex" method="POST">
     <label style="padding: 12px 12px 12px 0; display: inline-block;" for="name">Employee name:</label>
     <input style="padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-size: medium;" type="text" id="name" name="name" value="<?php echo $employeeName; ?>" placeholder="Employee name">
@@ -45,8 +40,8 @@ $employeeName = $employeesManager->getEmployeeName($id);
     if (!empty($_GET['delete_project_id'])) {
         $employeesManager->deleteProjects($id, $_GET['delete_project_id']);
     }
-    //    select employee projects logic
 
+    //    select employee projects logic
     $projects = $employeesManager->getEmployeeProject($id);
 
     foreach($projects as $project) {

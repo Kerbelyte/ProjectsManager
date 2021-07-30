@@ -1,6 +1,6 @@
 # Projects manager system
 
-This is my second project built with PHP and SQL!
+This is my third project built with PHP and using Doctrine ORM.
 This project implements CRUD (Create, Read, Update, Delete) functionality.
 
 ## It allows:
@@ -12,8 +12,10 @@ This project implements CRUD (Create, Read, Update, Delete) functionality.
 ## Installation
 
 * Clone the repository;
-* Import 'projects.sql' script into local SQL Server and create a database;
-* Open the path where you can launch php interpreter, e.g. http://localhost;
+* Import `projects.sql` script into local SQL Server;
+* Execute comand `php composer.phar install`;
+* Open the path where you can launch php interpreter, e.g. `http://localhost`;
+
 
 ## Author
 Dovilė [Github](https://github.com/Kerbelyte) , [LinkedIn](https://linkedin.com/in/dovilė-kerbelytė-66634a162)

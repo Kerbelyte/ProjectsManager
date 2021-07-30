@@ -9,7 +9,6 @@ if (isset($_GET['delete'])) {
 }
 
 // CREATE LOGIC
-
 if (isset($_POST['add_employee'])) {
     if (empty($_POST['employees_name'])) {
         echo '<div style="color: red">Please enter employee name!</div>';
